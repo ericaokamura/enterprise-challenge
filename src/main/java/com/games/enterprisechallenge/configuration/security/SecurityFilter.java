@@ -31,9 +31,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private AutenticacaoService autenticacaoService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenJWT = recuperarToken(request);
@@ -42,9 +39,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             Date expirationDate = tokenService.getExpirationDate(tokenJWT);
             Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(subject);
             if(usuarioOptional.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = autenticacaoService.loadUserByUsername(subject);
-                if (new JWTUtils().validateToken(tokenJWT, subject, expirationDate, userDetails)) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+                Usuario usuario = usuarioOptional.get();
+                if (new JWTUtils().validateToken(subject, expirationDate, usuario)) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, null);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
