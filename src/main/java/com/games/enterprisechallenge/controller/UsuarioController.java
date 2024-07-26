@@ -17,7 +17,11 @@ public class UsuarioController {
     @CrossOrigin
     @PostMapping("/")
     public ResponseEntity<UsuarioDTO> salvarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        return ResponseEntity.ok(usuarioService.salvarUsuario(usuarioDTO));
+        try {
+            UsuarioDTO dto = usuarioService.salvarUsuario(usuarioDTO);
+            return ResponseEntity.ok(dto);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
-
 }
