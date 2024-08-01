@@ -15,7 +15,6 @@ public class AlunoDTO {
     private String nomeCompleto;
     private String numeroCelular;
     private String email;
-    private String numeroIdentificacao;
     private Long idade;
     private boolean conheceProgramacao;
 }

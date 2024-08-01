@@ -14,7 +14,6 @@ public class VoluntarioDTO {
     private String nomeCompleto;
     private String numeroCelular;
     private String email;
-    private String numeroIdentificacao;
     private String motivacao;
 
 }

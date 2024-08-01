@@ -10,7 +10,6 @@ public class AlunoMapping {
         dto.setEmail(model.getEmail());
         dto.setIdade(model.getIdade());
         dto.setNomeCompleto(model.getNomeCompleto());
-        dto.setNumeroIdentificacao(model.getNumeroIdentificacao());
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setConheceProgramacao(model.isConheceProgramacao());
         return dto;
@@ -21,7 +20,6 @@ public class AlunoMapping {
         model.setEmail(dto.getEmail());
         model.setIdade(dto.getIdade());
         model.setNomeCompleto(dto.getNomeCompleto());
-        model.setNumeroIdentificacao(dto.getNumeroIdentificacao());
         model.setNumeroCelular(dto.getNumeroCelular());
         model.setConheceProgramacao(dto.isConheceProgramacao());
         return model;

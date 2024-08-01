@@ -11,7 +11,6 @@ public class VoluntarioMapping {
         VoluntarioDTO dto = new VoluntarioDTO();
         dto.setEmail(model.getEmail());
         dto.setNomeCompleto(model.getNomeCompleto());
-        dto.setNumeroIdentificacao(model.getNumeroIdentificacao());
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setMotivacao(model.getMotivacao());
         return dto;
@@ -21,7 +20,6 @@ public class VoluntarioMapping {
         Voluntario model = new Voluntario();
         model.setEmail(dto.getEmail());
         model.setNomeCompleto(dto.getNomeCompleto());
-        model.setNumeroIdentificacao(dto.getNumeroIdentificacao());
         model.setNumeroCelular(dto.getNumeroCelular());
         model.setMotivacao(dto.getMotivacao());
         return model;
