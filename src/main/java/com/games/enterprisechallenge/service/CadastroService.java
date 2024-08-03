@@ -1,5 +1,8 @@
 package com.games.enterprisechallenge.service;
 
+import com.games.enterprisechallenge.exception.AlunoJaExistenteException;
+import com.games.enterprisechallenge.exception.ContatoJaExistenteException;
+import com.games.enterprisechallenge.exception.VoluntarioJaExistenteException;
 import com.games.enterprisechallenge.mapping.AlunoMapping;
 import com.games.enterprisechallenge.mapping.ContatoMapping;
 import com.games.enterprisechallenge.mapping.VoluntarioMapping;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CadastroService {
@@ -31,16 +35,28 @@ public class CadastroService {
     private ContatoRepository contatoRepository;
 
     public AlunoDTO cadastrarAluno(AlunoDTO dto) {
+        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(dto.getEmail());
+        if(alunoOptional.isPresent()) {
+            throw new AlunoJaExistenteException("Aluno já existente.");
+        }
         Aluno aluno = alunoRepository.save(AlunoMapping.convertDtoToModel(dto));
         return AlunoMapping.convertModelToDto(aluno);
     }
 
     public ContatoDTO cadastrarContato(ContatoDTO dto) {
+        Optional<Contato> contatoOptional = contatoRepository.findByEmail(dto.getEmail());
+        if(contatoOptional.isPresent()) {
+            throw new ContatoJaExistenteException("Contato já existente.");
+        }
         Contato contato = contatoRepository.save(ContatoMapping.convertDtoToModel(dto));
         return ContatoMapping.convertModelToDto(contato);
     }
 
     public VoluntarioDTO cadastrarVoluntario(VoluntarioDTO dto) {
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findByEmail(dto.getEmail());
+        if(voluntarioOptional.isPresent()) {
+            throw new VoluntarioJaExistenteException("Voluntário já existente.");
+        }
         Voluntario voluntario = voluntarioRepository.save(VoluntarioMapping.convertDtoToModel(dto));
         return VoluntarioMapping.convertModelToDto(voluntario);
     }
