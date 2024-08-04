@@ -1,9 +1,11 @@
 FROM openjdk:17
+
+RUN mkdir /app
+
+COPY /target/enterprise-challenge-0.0.1-SNAPSHOT.jar /app/app.jar
+
 WORKDIR /app
 
-COPY app/build/lib/* build/lib/
+EXPOSE 8080
 
-COPY app/build/libs/app.jar build/
-
-WORKDIR /app/build
-ENTRYPOINT java -jar app.jar
+ENTRYPOINT [ "java", "-jar", "/app/app.jar" ]
