@@ -1,10 +1,9 @@
 FROM openjdk:17
 WORKDIR /app
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+COPY app/build/lib/* build/lib/
 
-COPY src ./src
+COPY app/build/libs/app.jar build/
 
-CMD ["./mvnw", "spring-boot:run"]
+WORKDIR /app/build
+ENTRYPOINT java -jar app.jar
