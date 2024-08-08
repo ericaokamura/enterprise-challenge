@@ -1,6 +1,6 @@
 ### Criação de usuário admin
 
-#### Utilize o endpoint /usuarios/ para cadastrar um novo usuário admin, utilizando o Postman:
+#### Utilize o endpoint POST /usuarios/ para cadastrar um novo usuário admin, utilizando o Postman:
 
 ##### Request body:
 
