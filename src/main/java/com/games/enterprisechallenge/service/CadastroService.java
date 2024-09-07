@@ -36,6 +36,9 @@ public class CadastroService {
     private OficinaRepository oficinaRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public AlunoDTO cadastrarAluno(AlunoDTO dto) {
@@ -51,11 +54,19 @@ public class CadastroService {
         if(oficinaOptional.isEmpty()) {
             throw new OficinaNaoExistenteException("Oficina informada não existente.");
         }
+
         Aluno salvarAluno = AlunoMapping.convertDtoToModel(dto);
         salvarAluno.setSenha(passwordEncoder.encode(dto.getSenha()));
         salvarAluno.setRole(roleOptional.get());
         salvarAluno.setOficina(oficinaOptional.get());
         Aluno aluno = alunoRepository.save(salvarAluno);
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuarioRepository.save(usuario);
+
         return AlunoMapping.convertModelToDto(aluno);
     }
 
@@ -72,6 +83,13 @@ public class CadastroService {
         salvarContato.setSenha(passwordEncoder.encode(dto.getSenha()));
         salvarContato.setRole(roleOptional.get());
         Contato contato = contatoRepository.save(salvarContato);
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuarioRepository.save(usuario);
+
         return ContatoMapping.convertModelToDto(contato);
     }
 
@@ -93,6 +111,13 @@ public class CadastroService {
         salvarVoluntario.setRole(roleOptional.get());
         salvarVoluntario.setOficina(oficinaOptional.get());
         Voluntario voluntario = voluntarioRepository.save(salvarVoluntario);
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(dto.getEmail());
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuarioRepository.save(usuario);
+
         return VoluntarioMapping.convertModelToDto(voluntario);
     }
 
