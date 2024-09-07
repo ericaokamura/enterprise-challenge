@@ -18,6 +18,11 @@ public class CustomizedExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler(AlunoNaoExisteException.class)
+    public ResponseEntity alunoNaoExisteException() {
+        return ResponseEntity.badRequest().build();
+    }
+
     @ExceptionHandler(ContatoJaExistenteException.class)
     public ResponseEntity contatoJaExistenteException() {
         return ResponseEntity.badRequest().build();

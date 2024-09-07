@@ -29,6 +29,11 @@ public class CadastroController {
         return ResponseEntity.ok(cadastroService.retornarAlunos());
     }
 
+    @GetMapping("/alunos/{aluno_email}")
+    public ResponseEntity<AlunoDTO> retornarAluno(@PathVariable("aluno_email") String alunoEmail) {
+        return ResponseEntity.ok(cadastroService.retornarAluno(alunoEmail));
+    }
+
     @PostMapping("/voluntarios")
     public ResponseEntity<VoluntarioDTO> cadastrarVoluntario(@RequestBody VoluntarioDTO voluntario) {
         return ResponseEntity.ok(cadastroService.cadastrarVoluntario(voluntario));
@@ -37,6 +42,10 @@ public class CadastroController {
     @GetMapping("/voluntarios")
     public ResponseEntity<List<VoluntarioDTO>> retornarVoluntarios() {
         return ResponseEntity.ok(cadastroService.retornarVoluntarios());
+    }
+    @GetMapping("/voluntarios/{voluntario_email}")
+    public ResponseEntity<VoluntarioDTO> retornarVoluntario(@PathVariable("voluntario_email") String voluntarioEmail) {
+        return ResponseEntity.ok(cadastroService.retornarVoluntario(voluntarioEmail));
     }
 
     @PostMapping("/contatos")
@@ -47,5 +56,10 @@ public class CadastroController {
     @GetMapping("/contatos")
     public ResponseEntity<List<ContatoDTO>> retornarContatos() {
         return ResponseEntity.ok(cadastroService.retornarContatos());
+    }
+
+    @GetMapping("/contatos/{contato_email}")
+    public ResponseEntity<ContatoDTO> retornarContatos(@PathVariable("contato_email") String contatoEmail) {
+        return ResponseEntity.ok(cadastroService.retornarContato(contatoEmail));
     }
 }

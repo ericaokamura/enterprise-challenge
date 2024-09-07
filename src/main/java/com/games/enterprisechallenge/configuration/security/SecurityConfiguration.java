@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/usuario/").permitAll()
+                .requestMatchers(HttpMethod.POST, "/usuarios/").permitAll()
                 .requestMatchers(HttpMethod.POST, "/cadastros/alunos").permitAll()
                 .requestMatchers(HttpMethod.POST, "/cadastros/voluntarios").permitAll()
                 .requestMatchers(HttpMethod.POST, "/cadastros/contatos").permitAll()

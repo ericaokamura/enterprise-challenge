@@ -13,7 +13,10 @@ import lombok.Setter;
 public class VoluntarioDTO {
     private String nomeCompleto;
     private String numeroCelular;
-    private String email;
     private String motivacao;
+    private String email;
+    private String senha;
+    private Long oficinaId;
+    private Long roleId;
 
 }

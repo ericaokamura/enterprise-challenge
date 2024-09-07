@@ -1,8 +1,12 @@
 package com.games.enterprisechallenge.configuration.security;
 
+import com.games.enterprisechallenge.model.Aluno;
+import com.games.enterprisechallenge.model.Contato;
 import com.games.enterprisechallenge.model.Usuario;
-import com.games.enterprisechallenge.repository.UsuarioRepository;
-import com.games.enterprisechallenge.service.AutenticacaoService;
+import com.games.enterprisechallenge.model.Voluntario;
+import com.games.enterprisechallenge.repository.AlunoRepository;
+import com.games.enterprisechallenge.repository.ContatoRepository;
+import com.games.enterprisechallenge.repository.VoluntarioRepository;
 import com.games.enterprisechallenge.service.TokenService;
 import com.games.enterprisechallenge.utils.JWTUtils;
 import jakarta.servlet.FilterChain;
@@ -10,10 +14,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,18 +32,23 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private AlunoRepository alunoRepository;
+    @Autowired
+    private VoluntarioRepository voluntarioRepository;
+    @Autowired
+    private ContatoRepository contatoRepository;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenJWT = recuperarToken(request);
         if (tokenJWT != null) {
             String subject = tokenService.getSubject(tokenJWT);
+            String[] chunk = subject.split(":");
             Date expirationDate = tokenService.getExpirationDate(tokenJWT);
-            Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(subject);
-            if(usuarioOptional.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                Usuario usuario = usuarioOptional.get();
-                if (new JWTUtils().validateToken(subject, expirationDate, usuario)) {
+            Object usuario = retornaUsuario(chunk[0], chunk[1]);
+            if(usuario != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (new JWTUtils().validateToken(chunk[0], expirationDate, usuario)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, null);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -57,6 +65,28 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
 
         return null;
+    }
+
+    private Object retornaUsuario(String usuarioEmail, String roleName) {
+        Object retorno = null;
+        switch (roleName) {
+            case "ROLE_ALUNO": {
+                Optional<Aluno> aluno = alunoRepository.findByEmail(usuarioEmail);
+                retorno = aluno.isPresent() ? aluno.get() : null;
+                break;
+            }
+            case "ROLE_VOLUNTARIO": {
+                Optional<Voluntario> voluntario = voluntarioRepository.findByEmail(usuarioEmail);
+                retorno = voluntario.isPresent() ? voluntario.get() : null;
+                break;
+            }
+            case "ROLE_CONTATO": {
+                Optional<Contato> contato = contatoRepository.findByEmail(usuarioEmail);
+                retorno = contato.isPresent() ? contato.get() : null;
+                break;
+            }
+        }
+        return retorno;
     }
 
 }

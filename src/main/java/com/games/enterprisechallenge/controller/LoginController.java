@@ -3,7 +3,9 @@ package com.games.enterprisechallenge.controller;
 import com.games.enterprisechallenge.model.DadosAutenticacao;
 import com.games.enterprisechallenge.model.DadosTokenJWT;
 import com.games.enterprisechallenge.model.Usuario;
-import com.games.enterprisechallenge.repository.UsuarioRepository;
+import com.games.enterprisechallenge.repository.AlunoRepository;
+import com.games.enterprisechallenge.repository.ContatoRepository;
+import com.games.enterprisechallenge.repository.VoluntarioRepository;
 import com.games.enterprisechallenge.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,18 @@ public class LoginController {
 
     @Autowired
     private TokenService tokenService;
-
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private AlunoRepository alunoRepository;
+    @Autowired
+    private VoluntarioRepository voluntarioRepository;
+    @Autowired
+    private ContatoRepository contatoRepository;
 
     @PostMapping
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @CrossOrigin
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByNomeUsuario(dados.nomeUsuario());
+        Optional<Usuario> usuarioOptional = retornaUsuario(dados.nomeUsuario(), dados.roleName());
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
             if(BCrypt.checkpw(dados.senha(), usuario.getSenha())) {
@@ -45,5 +51,15 @@ public class LoginController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private Optional<Usuario> retornaUsuario(String usuarioEmail, String roleName) {
+        Optional usuario = Optional.empty();
+        switch (roleName) {
+            case "ROLE_ALUNO": usuario = alunoRepository.findByEmail(usuarioEmail); break;
+            case "ROLE_VOLUNTARIO": usuario = voluntarioRepository.findByEmail(usuarioEmail); break;
+            case "ROLE_CONTATO": usuario = contatoRepository.findByEmail(usuarioEmail); break;
+        }
+        return usuario;
     }
 }

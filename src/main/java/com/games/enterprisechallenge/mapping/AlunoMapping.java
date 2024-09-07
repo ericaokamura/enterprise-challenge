@@ -2,7 +2,9 @@ package com.games.enterprisechallenge.mapping;
 
 import com.games.enterprisechallenge.model.Aluno;
 import com.games.enterprisechallenge.model.dto.AlunoDTO;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 public class AlunoMapping {
 
     public static AlunoDTO convertModelToDto(Aluno model) {
@@ -12,6 +14,7 @@ public class AlunoMapping {
         dto.setNomeCompleto(model.getNomeCompleto());
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setConheceProgramacao(model.isConheceProgramacao());
+        dto.setOficinaId(model.getOficina().getId());
         return dto;
     }
 

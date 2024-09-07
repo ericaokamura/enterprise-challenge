@@ -1,21 +1,16 @@
 package com.games.enterprisechallenge.service;
 
-import com.games.enterprisechallenge.exception.AlunoJaExistenteException;
-import com.games.enterprisechallenge.exception.ContatoJaExistenteException;
-import com.games.enterprisechallenge.exception.VoluntarioJaExistenteException;
+import com.games.enterprisechallenge.exception.*;
 import com.games.enterprisechallenge.mapping.AlunoMapping;
 import com.games.enterprisechallenge.mapping.ContatoMapping;
 import com.games.enterprisechallenge.mapping.VoluntarioMapping;
-import com.games.enterprisechallenge.model.Aluno;
-import com.games.enterprisechallenge.model.Contato;
-import com.games.enterprisechallenge.model.Voluntario;
+import com.games.enterprisechallenge.model.*;
 import com.games.enterprisechallenge.model.dto.AlunoDTO;
 import com.games.enterprisechallenge.model.dto.ContatoDTO;
 import com.games.enterprisechallenge.model.dto.VoluntarioDTO;
-import com.games.enterprisechallenge.repository.AlunoRepository;
-import com.games.enterprisechallenge.repository.ContatoRepository;
-import com.games.enterprisechallenge.repository.VoluntarioRepository;
+import com.games.enterprisechallenge.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,12 +29,33 @@ public class CadastroService {
     @Autowired
     private ContatoRepository contatoRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private OficinaRepository oficinaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public AlunoDTO cadastrarAluno(AlunoDTO dto) {
         Optional<Aluno> alunoOptional = alunoRepository.findByEmail(dto.getEmail());
         if(alunoOptional.isPresent()) {
             throw new AlunoJaExistenteException("Aluno já existente.");
         }
-        Aluno aluno = alunoRepository.save(AlunoMapping.convertDtoToModel(dto));
+        Optional<Role> roleOptional = roleRepository.findById(dto.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+        Optional<Oficina> oficinaOptional = oficinaRepository.findById(dto.getOficinaId());
+        if(oficinaOptional.isEmpty()) {
+            throw new OficinaNaoExistenteException("Oficina informada não existente.");
+        }
+        Aluno salvarAluno = AlunoMapping.convertDtoToModel(dto);
+        salvarAluno.setSenha(passwordEncoder.encode(dto.getSenha()));
+        salvarAluno.setRole(roleOptional.get());
+        salvarAluno.setOficina(oficinaOptional.get());
+        Aluno aluno = alunoRepository.save(salvarAluno);
         return AlunoMapping.convertModelToDto(aluno);
     }
 
@@ -48,7 +64,14 @@ public class CadastroService {
         if(contatoOptional.isPresent()) {
             throw new ContatoJaExistenteException("Contato já existente.");
         }
-        Contato contato = contatoRepository.save(ContatoMapping.convertDtoToModel(dto));
+        Optional<Role> roleOptional = roleRepository.findById(dto.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+        Contato salvarContato = ContatoMapping.convertDtoToModel(dto);
+        salvarContato.setSenha(passwordEncoder.encode(dto.getSenha()));
+        salvarContato.setRole(roleOptional.get());
+        Contato contato = contatoRepository.save(salvarContato);
         return ContatoMapping.convertModelToDto(contato);
     }
 
@@ -57,7 +80,19 @@ public class CadastroService {
         if(voluntarioOptional.isPresent()) {
             throw new VoluntarioJaExistenteException("Voluntário já existente.");
         }
-        Voluntario voluntario = voluntarioRepository.save(VoluntarioMapping.convertDtoToModel(dto));
+        Optional<Role> roleOptional = roleRepository.findById(dto.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+        Optional<Oficina> oficinaOptional = oficinaRepository.findById(dto.getOficinaId());
+        if(oficinaOptional.isEmpty()) {
+            throw new OficinaNaoExistenteException("Oficina informada não existente.");
+        }
+        Voluntario salvarVoluntario = VoluntarioMapping.convertDtoToModel(dto);
+        salvarVoluntario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        salvarVoluntario.setRole(roleOptional.get());
+        salvarVoluntario.setOficina(oficinaOptional.get());
+        Voluntario voluntario = voluntarioRepository.save(salvarVoluntario);
         return VoluntarioMapping.convertModelToDto(voluntario);
     }
 
@@ -68,6 +103,14 @@ public class CadastroService {
         return retorno;
     }
 
+    public AlunoDTO retornarAluno(String alunoEmail) {
+        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(alunoEmail);
+        if(alunoOptional.isEmpty()) {
+            throw new AlunoNaoExisteException("Aluno não existe no nosso cadastro.");
+        }
+        return AlunoMapping.convertModelToDto(alunoOptional.get());
+    }
+
     public List<VoluntarioDTO> retornarVoluntarios() {
         List<Voluntario> voluntarios = voluntarioRepository.findAll();
         List<VoluntarioDTO> retorno = new ArrayList<>();
@@ -75,10 +118,26 @@ public class CadastroService {
         return retorno;
     }
 
+    public VoluntarioDTO retornarVoluntario(String voluntarioEmail) {
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findByEmail(voluntarioEmail);
+        if(voluntarioOptional.isEmpty()) {
+            throw new VoluntarioNaoExisteException("Voluntário não existe no nosso cadastro.");
+        }
+        return VoluntarioMapping.convertModelToDto(voluntarioOptional.get());
+    }
+
     public List<ContatoDTO> retornarContatos() {
         List<Contato> contatos = contatoRepository.findAll();
         List<ContatoDTO> retorno = new ArrayList<>();
         contatos.forEach(c -> retorno.add(ContatoMapping.convertModelToDto(c)));
         return retorno;
+    }
+
+    public ContatoDTO retornarContato(String contatoEmail) {
+        Optional<Contato> contatoOptional = contatoRepository.findByEmail(contatoEmail);
+        if(contatoOptional.isEmpty()) {
+            throw new ContatoNaoExisteException("Contato não existe no nosso cadastro.");
+        }
+        return ContatoMapping.convertModelToDto(contatoOptional.get());
     }
 }

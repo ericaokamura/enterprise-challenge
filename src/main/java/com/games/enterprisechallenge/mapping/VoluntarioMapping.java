@@ -13,6 +13,7 @@ public class VoluntarioMapping {
         dto.setNomeCompleto(model.getNomeCompleto());
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setMotivacao(model.getMotivacao());
+        dto.setRoleId(model.getRole().getId());
         return dto;
     }
 
