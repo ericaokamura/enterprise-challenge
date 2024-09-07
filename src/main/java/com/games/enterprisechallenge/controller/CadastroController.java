@@ -3,17 +3,19 @@ package com.games.enterprisechallenge.controller;
 
 import com.games.enterprisechallenge.model.dto.AlunoDTO;
 import com.games.enterprisechallenge.model.dto.ContatoDTO;
+import com.games.enterprisechallenge.model.dto.OficinaDTO;
 import com.games.enterprisechallenge.model.dto.VoluntarioDTO;
 import com.games.enterprisechallenge.service.CadastroService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/cadastros")
+@RequestMapping("/")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class CadastroController {
     @Autowired
@@ -61,5 +63,10 @@ public class CadastroController {
     @GetMapping("/contatos/{contato_email}")
     public ResponseEntity<ContatoDTO> retornarContatos(@PathVariable("contato_email") String contatoEmail) {
         return ResponseEntity.ok(cadastroService.retornarContato(contatoEmail));
+    }
+
+    @GetMapping("/oficinas/{usuario_email}")
+    public ResponseEntity<OficinaDTO> retornarOficinasUsuario(@PathVariable("usuario_email") String usuarioEmail, @Param("role") String role) {
+        return ResponseEntity.ok(cadastroService.retornarOficinasUsuario(usuarioEmail, role));
     }
 }

@@ -14,6 +14,7 @@ public class VoluntarioMapping {
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setMotivacao(model.getMotivacao());
         dto.setRoleId(model.getRole().getId());
+        dto.setOficinaId(model.getOficina().getId());
         return dto;
     }
 

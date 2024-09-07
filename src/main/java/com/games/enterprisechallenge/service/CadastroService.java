@@ -3,10 +3,12 @@ package com.games.enterprisechallenge.service;
 import com.games.enterprisechallenge.exception.*;
 import com.games.enterprisechallenge.mapping.AlunoMapping;
 import com.games.enterprisechallenge.mapping.ContatoMapping;
+import com.games.enterprisechallenge.mapping.OficinaMapping;
 import com.games.enterprisechallenge.mapping.VoluntarioMapping;
 import com.games.enterprisechallenge.model.*;
 import com.games.enterprisechallenge.model.dto.AlunoDTO;
 import com.games.enterprisechallenge.model.dto.ContatoDTO;
+import com.games.enterprisechallenge.model.dto.OficinaDTO;
 import com.games.enterprisechallenge.model.dto.VoluntarioDTO;
 import com.games.enterprisechallenge.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,5 +166,37 @@ public class CadastroService {
             throw new ContatoNaoExisteException("Contato não existe no nosso cadastro.");
         }
         return ContatoMapping.convertModelToDto(contatoOptional.get());
+    }
+
+    public OficinaDTO retornarOficinasUsuario(String usuarioEmail, String role) {
+        Object usuario = retornaUsuario(usuarioEmail, role);
+        if(usuario instanceof Aluno) {
+            return OficinaMapping.convertModelToDto(((Aluno) usuario).getOficina());
+        } else if (usuario instanceof Voluntario) {
+            return OficinaMapping.convertModelToDto(((Voluntario) usuario).getOficina());
+        }
+        return null;
+    }
+
+    private Object retornaUsuario(String usuarioEmail, String roleName) {
+        Object retorno = null;
+        switch (roleName) {
+            case "ROLE_ALUNO": {
+                Optional<Aluno> aluno = alunoRepository.findByEmail(usuarioEmail);
+                retorno = aluno.isPresent() ? aluno.get() : null;
+                break;
+            }
+            case "ROLE_VOLUNTARIO": {
+                Optional<Voluntario> voluntario = voluntarioRepository.findByEmail(usuarioEmail);
+                retorno = voluntario.isPresent() ? voluntario.get() : null;
+                break;
+            }
+            case "ROLE_CONTATO": {
+                Optional<Contato> contato = contatoRepository.findByEmail(usuarioEmail);
+                retorno = contato.isPresent() ? contato.get() : null;
+                break;
+            }
+        }
+        return retorno;
     }
 }

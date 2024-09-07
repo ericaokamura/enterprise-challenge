@@ -27,9 +27,9 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/cadastros/alunos").permitAll()
-                .requestMatchers(HttpMethod.POST, "/cadastros/voluntarios").permitAll()
-                .requestMatchers(HttpMethod.POST, "/cadastros/contatos").permitAll()
+                .requestMatchers(HttpMethod.POST, "/alunos").permitAll()
+                .requestMatchers(HttpMethod.POST, "/voluntarios").permitAll()
+                .requestMatchers(HttpMethod.POST, "/contatos").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

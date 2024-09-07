@@ -15,6 +15,7 @@ public class AlunoMapping {
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setConheceProgramacao(model.isConheceProgramacao());
         dto.setOficinaId(model.getOficina().getId());
+        dto.setRoleId(model.getRole().getId());
         return dto;
     }
 

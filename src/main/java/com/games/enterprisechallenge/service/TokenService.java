@@ -26,7 +26,7 @@ public class TokenService {
             Algorithm algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("API Enterprise Challenge - Games")
-                    .withSubject(usuario.getEmail() + ":" + usuario.getRole().getNome())
+                    .withSubject(usuario.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){

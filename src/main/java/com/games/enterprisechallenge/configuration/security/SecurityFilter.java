@@ -40,12 +40,11 @@ public class SecurityFilter extends OncePerRequestFilter {
         String tokenJWT = recuperarToken(request);
         if (tokenJWT != null) {
             String subject = tokenService.getSubject(tokenJWT);
-            String[] chunk = subject.split(":");
             Date expirationDate = tokenService.getExpirationDate(tokenJWT);
-            Optional<Usuario> usuario = usuarioRepository.findByEmail(chunk[0]);
+            Optional<Usuario> usuario = usuarioRepository.findByEmail(subject);
             if(usuario.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (new JWTUtils().validateToken(chunk[0], expirationDate, usuario.get())) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, usuario.get().getAuthorities());
+                if (new JWTUtils().validateToken(subject, expirationDate, usuario.get())) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, null);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
@@ -59,7 +58,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authorizationHeader != null) {
             return authorizationHeader.replace("Bearer ", "");
         }
-
         return null;
     }
 
