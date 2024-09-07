@@ -5,6 +5,7 @@ import com.games.enterprisechallenge.model.DadosTokenJWT;
 import com.games.enterprisechallenge.model.Usuario;
 import com.games.enterprisechallenge.repository.AlunoRepository;
 import com.games.enterprisechallenge.repository.ContatoRepository;
+import com.games.enterprisechallenge.repository.UsuarioRepository;
 import com.games.enterprisechallenge.repository.VoluntarioRepository;
 import com.games.enterprisechallenge.service.TokenService;
 import jakarta.validation.Valid;
@@ -28,17 +29,13 @@ public class LoginController {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private AlunoRepository alunoRepository;
-    @Autowired
-    private VoluntarioRepository voluntarioRepository;
-    @Autowired
-    private ContatoRepository contatoRepository;
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping
     //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @CrossOrigin
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        Optional<Usuario> usuarioOptional = retornaUsuario(dados.nomeUsuario(), dados.roleName());
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(dados.nomeUsuario());
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
             if(BCrypt.checkpw(dados.senha(), usuario.getSenha())) {
@@ -53,13 +50,4 @@ public class LoginController {
         }
     }
 
-    private Optional<Usuario> retornaUsuario(String usuarioEmail, String roleName) {
-        Optional usuario = Optional.empty();
-        switch (roleName) {
-            case "ROLE_ALUNO": usuario = alunoRepository.findByEmail(usuarioEmail); break;
-            case "ROLE_VOLUNTARIO": usuario = voluntarioRepository.findByEmail(usuarioEmail); break;
-            case "ROLE_CONTATO": usuario = contatoRepository.findByEmail(usuarioEmail); break;
-        }
-        return usuario;
-    }
 }

@@ -12,6 +12,12 @@ create table oficina(
     voluntario_id INT references voluntario(id),
     horarios VARCHAR(200)
 );
+create table usuario(
+    id INT primary key auto_increment,
+    email VARCHAR(200),
+    senha VARCHAR(200),
+    role_id INT references role(id)
+);
 create table aluno(
     id INT primary key auto_increment,
     nome_completo VARCHAR(200),
