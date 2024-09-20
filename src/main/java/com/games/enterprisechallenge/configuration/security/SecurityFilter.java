@@ -44,7 +44,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             Optional<Usuario> usuario = usuarioRepository.findByEmail(subject);
             if(usuario.isPresent() && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (new JWTUtils().validateToken(subject, expirationDate, usuario.get())) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, null);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario, null, usuario.get().getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }

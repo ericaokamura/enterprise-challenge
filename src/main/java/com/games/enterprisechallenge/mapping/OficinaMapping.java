@@ -17,7 +17,7 @@ public class OficinaMapping {
         OficinaDTO dto = new OficinaDTO();
         dto.setNomeOficina(model.getNomeOficina());
         dto.setHorarios(model.getHorarios());
-        List<AlunoDTO> alunos = new ArrayList<>();
+        dto.setId(model.getId());
         return dto;
     }
 
@@ -25,7 +25,6 @@ public class OficinaMapping {
         Oficina model = new Oficina();
         model.setNomeOficina(dto.getNomeOficina());
         model.setHorarios(dto.getHorarios());
-        List<Aluno> alunos = new ArrayList<>();
         return model;
     }
 }

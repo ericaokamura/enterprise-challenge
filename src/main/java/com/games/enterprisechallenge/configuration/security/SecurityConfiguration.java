@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/alunos").permitAll()
                 .requestMatchers(HttpMethod.POST, "/voluntarios").permitAll()
                 .requestMatchers(HttpMethod.POST, "/contatos").permitAll()
+                .requestMatchers(HttpMethod.GET, "/oficinas").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

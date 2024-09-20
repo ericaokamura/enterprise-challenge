@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "e3aae625-8711-422f-b81c-84b3bb825a67",
+		"name": "FIAP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5167719"
+	},
+	"item": [
+		{
+			"name": "Enterprise Challenge - Games",
+			"item": [
+				{
+					"name": "POST ALUNO",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomeCompleto\": \"Isaias Duarte\",\n    \"numeroCelular\": \"(11) 996174875\",\n    \"email\": \"isaiasduarte@gmail.com\",\n    \"conheceProgramacao\": \"false\",\n    \"idade\": 15,\n    \"senha\": \"12345678\",\n    \"roleId\": 1,\n    \"oficinaId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8091/alunos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomeUsuario\": \"ericaokamura@gmail.com\",\n    \"senha\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8091/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST VOLUNTARIO",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljYW9rYW11cmEiLCJpc3MiOiJBUEkgRW50ZXJwcmlzZSBDaGFsbGVuZ2UgLSBHYW1lcyIsImV4cCI6MTcyMjc5MTgwMH0.a6ObppOA-EdpPG5KKWnA8nI8qaSrjlTcrToX4VAazqM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nomeCompleto\": \"Erica Okamura\",\n    \"numeroCelular\": \"(11) 91048-0404\",\n    \"email\": \"ericaokamura@gmail.com\",\n    \"motivacao\": \"motivacao\",\n    \"senha\": \"12345678\",\n    \"roleId\": 2,\n    \"oficinaId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8091/voluntarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"voluntarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET OFICINA BY USER EMAIL",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlcmljYW9rYW11cmFAZ21haWwuY29tIiwiaXNzIjoiQVBJIEVudGVycHJpc2UgQ2hhbGxlbmdlIC0gR2FtZXMiLCJleHAiOjE3MjU3MjA1NjN9.MFyHZguGf0f0FQ8msXPlH-KeGzs8yWppmIZXPE3GXyU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8091/oficinas/erica.okamura@gmail.com?role=ROLE_VOLUNTARIO",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"oficinas",
+								"erica.okamura@gmail.com"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "ROLE_VOLUNTARIO"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

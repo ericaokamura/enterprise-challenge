@@ -9,7 +9,6 @@ create table role(
 create table oficina(
     id INT primary key auto_increment,
     nome_oficina VARCHAR(200),
-    voluntario_id INT references voluntario(id),
     horarios VARCHAR(200)
 );
 create table usuario(
@@ -62,5 +61,13 @@ insert into role (id, nome, authorities) values (
 );
 
 insert into oficina (id, nome_oficina, horarios) values (
-    1, 'Introdução à lógica de programação', 'SEG/QUA,19:30-21:30'
+    1, 'Introdução à lógica de programação', 'SEG/QUA/SEX,19:30-21:30'
+);
+
+insert into oficina (id, nome_oficina, horarios) values (
+    2, 'Introdução à segurança da informação', 'TER/QUI,19:30-21:30'
+);
+
+insert into oficina (id, nome_oficina, horarios) values (
+    3, 'Introdução aos jogos digitais', 'TER/QUI,10:30-12:30'
 );

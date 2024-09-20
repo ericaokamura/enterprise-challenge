@@ -138,6 +138,43 @@ public class CadastroService {
         return AlunoMapping.convertModelToDto(alunoOptional.get());
     }
 
+    public AlunoDTO atualizarAluno(String alunoEmail, AlunoDTO alunoDTO) {
+        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(alunoEmail);
+        if(alunoOptional.isEmpty()) {
+            throw new AlunoNaoExisteException("Aluno não existe no nosso cadastro.");
+        }
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(alunoEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+
+        Optional<Role> roleOptional = roleRepository.findById(alunoDTO.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+
+        Optional<Oficina> oficinaOptional = oficinaRepository.findById(alunoDTO.getOficinaId());
+        if(oficinaOptional.isEmpty()) {
+            throw new OficinaNaoExistenteException("Oficina informada não existente.");
+        }
+
+        Aluno atualizarAluno = AlunoMapping.convertDtoToModel(alunoDTO);
+        atualizarAluno.setSenha(passwordEncoder.encode(alunoDTO.getSenha()));
+        atualizarAluno.setRole(roleOptional.get());
+        atualizarAluno.setOficina(oficinaOptional.get());
+        atualizarAluno.setId(alunoOptional.get().getId());
+        atualizarAluno.setEmail(alunoOptional.get().getEmail());
+        Aluno aluno = alunoRepository.save(atualizarAluno);
+
+        Usuario usuario = usuarioOptional.get();
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(alunoDTO.getSenha()));
+        usuarioRepository.save(usuario);
+
+        return AlunoMapping.convertModelToDto(aluno);
+    }
+
     public List<VoluntarioDTO> retornarVoluntarios() {
         List<Voluntario> voluntarios = voluntarioRepository.findAll();
         List<VoluntarioDTO> retorno = new ArrayList<>();
@@ -198,5 +235,114 @@ public class CadastroService {
             }
         }
         return retorno;
+    }
+
+    public VoluntarioDTO atualizarVoluntario(String voluntarioEmail, VoluntarioDTO voluntarioDTO) {
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findByEmail(voluntarioEmail);
+        if(voluntarioOptional.isEmpty()) {
+            throw new VoluntarioNaoExisteException("Voluntário não existente.");
+        }
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(voluntarioEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+
+        Optional<Role> roleOptional = roleRepository.findById(voluntarioDTO.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+        Optional<Oficina> oficinaOptional = oficinaRepository.findById(voluntarioDTO.getOficinaId());
+        if(oficinaOptional.isEmpty()) {
+            throw new OficinaNaoExistenteException("Oficina informada não existente.");
+        }
+
+        Voluntario atualizarVoluntario = VoluntarioMapping.convertDtoToModel(voluntarioDTO);
+        atualizarVoluntario.setSenha(passwordEncoder.encode(voluntarioDTO.getSenha()));
+        atualizarVoluntario.setRole(roleOptional.get());
+        atualizarVoluntario.setOficina(oficinaOptional.get());
+        atualizarVoluntario.setId(voluntarioOptional.get().getId());
+        atualizarVoluntario.setEmail(voluntarioOptional.get().getEmail());
+        Voluntario voluntario = voluntarioRepository.save(atualizarVoluntario);
+
+        Usuario usuario = usuarioOptional.get();
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(voluntarioDTO.getSenha()));
+        usuarioRepository.save(usuario);
+
+        return VoluntarioMapping.convertModelToDto(voluntario);
+    }
+
+    public ContatoDTO atualizarContato(String contatoEmail, ContatoDTO contatoDTO) {
+        Optional<Contato> contatoOptional = contatoRepository.findByEmail(contatoEmail);
+        if(contatoOptional.isEmpty()) {
+            throw new ContatoNaoExisteException("Contato não existente.");
+        }
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(contatoEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+
+        Optional<Role> roleOptional = roleRepository.findById(contatoDTO.getRoleId());
+        if(roleOptional.isEmpty()) {
+            throw new RoleNaoExistenteException("Role informada não existente.");
+        }
+
+        Contato atualizarContato = ContatoMapping.convertDtoToModel(contatoDTO);
+        atualizarContato.setSenha(passwordEncoder.encode(contatoDTO.getSenha()));
+        atualizarContato.setRole(roleOptional.get());
+        atualizarContato.setId(contatoOptional.get().getId());
+        atualizarContato.setEmail(contatoOptional.get().getEmail());
+        Contato contato = contatoRepository.save(atualizarContato);
+
+        Usuario usuario = usuarioOptional.get();
+        usuario.setRole(roleOptional.get());
+        usuario.setSenha(passwordEncoder.encode(contatoDTO.getSenha()));
+        usuarioRepository.save(usuario);
+
+        return ContatoMapping.convertModelToDto(contato);
+    }
+
+    public Void deletarContato(String contatoEmail) {
+        Optional<Contato> contatoOptional = contatoRepository.findByEmail(contatoEmail);
+        if(contatoOptional.isEmpty()) {
+            throw new ContatoNaoExisteException("Contato não existente.");
+        }
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(contatoEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+        contatoRepository.delete(contatoOptional.get());
+        usuarioRepository.delete(usuarioOptional.get());
+        return null;
+    }
+
+    public Void deletarVoluntario(String voluntarioEmail) {
+        Optional<Voluntario> voluntarioOptional = voluntarioRepository.findByEmail(voluntarioEmail);
+        if(voluntarioOptional.isEmpty()) {
+            throw new VoluntarioNaoExisteException("Voluntário não existente.");
+        }
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(voluntarioEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+        voluntarioRepository.delete(voluntarioOptional.get());
+        usuarioRepository.delete(usuarioOptional.get());
+        return null;
+    }
+
+    public Void deletarAluno(String alunoEmail) {
+        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(alunoEmail);
+        if(alunoOptional.isEmpty()) {
+            throw new AlunoNaoExisteException("Aluno não existente.");
+        }
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByEmail(alunoEmail);
+        if(usuarioOptional.isEmpty()) {
+            throw new UsuarioNaoExistenteException("Usuário não existente.");
+        }
+        alunoRepository.delete(alunoOptional.get());
+        usuarioRepository.delete(usuarioOptional.get());
+        return null;
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OficinaDTO {
 
+    private Long id;
     private String nomeOficina;
     private String horarios;
 
