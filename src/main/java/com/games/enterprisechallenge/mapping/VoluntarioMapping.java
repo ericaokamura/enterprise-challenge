@@ -1,8 +1,6 @@
 package com.games.enterprisechallenge.mapping;
 
-import com.games.enterprisechallenge.model.Aluno;
 import com.games.enterprisechallenge.model.Voluntario;
-import com.games.enterprisechallenge.model.dto.AlunoDTO;
 import com.games.enterprisechallenge.model.dto.VoluntarioDTO;
 
 public class VoluntarioMapping {

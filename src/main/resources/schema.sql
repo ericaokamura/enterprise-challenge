@@ -16,7 +16,7 @@ create table usuario(
     email VARCHAR(200),
     senha VARCHAR(200),
     aceita_termo BOOL,
-    role_id INT references role(id),
+    role_id INT references role(id)
 );
 create table aluno(
     id INT primary key auto_increment,
@@ -48,7 +48,7 @@ create table contato(
     email VARCHAR(200),
     senha VARCHAR(200),
     role_id INT references role(id),
-    critica_sugestao VARCHAR(500)
+    critica_sugestao VARCHAR(500),
     aceita_termo BOOL
 );
 
