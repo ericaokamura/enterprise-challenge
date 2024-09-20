@@ -44,6 +44,9 @@ public class CadastroService {
     private PasswordEncoder passwordEncoder;
 
     public AlunoDTO cadastrarAluno(AlunoDTO alunoDTO) {
+        if(!alunoDTO.isAceitaTermo()) {
+            throw new UsuarioNaoAceitouTermosException("Usuário não aceitou termos e condições de uso.");
+        }
         Optional<Aluno> alunoOptional = alunoRepository.findByEmail(alunoDTO.getEmail());
         if(alunoOptional.isPresent()) {
             throw new AlunoJaExistenteException("Aluno já existente.");
@@ -74,6 +77,9 @@ public class CadastroService {
     }
 
     public ContatoDTO cadastrarContato(ContatoDTO dto) {
+        if(!dto.isAceitaTermo()) {
+            throw new UsuarioNaoAceitouTermosException("Usuário não aceitou termos e condições de uso.");
+        }
         Optional<Contato> contatoOptional = contatoRepository.findByEmail(dto.getEmail());
         if(contatoOptional.isPresent()) {
             throw new ContatoJaExistenteException("Contato já existente.");
@@ -98,6 +104,9 @@ public class CadastroService {
     }
 
     public VoluntarioDTO cadastrarVoluntario(VoluntarioDTO dto) {
+        if(!dto.isAceitaTermo()) {
+            throw new UsuarioNaoAceitouTermosException("Usuário não aceitou termos e condições de uso.");
+        }
         Optional<Voluntario> voluntarioOptional = voluntarioRepository.findByEmail(dto.getEmail());
         if(voluntarioOptional.isPresent()) {
             throw new VoluntarioJaExistenteException("Voluntário já existente.");
