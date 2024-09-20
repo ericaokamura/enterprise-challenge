@@ -29,6 +29,7 @@ public class Voluntario implements UserDetails {
     private String motivacao;
     private String email;
     private String senha;
+    private boolean aceitaTermo;
     @OneToOne
     private Oficina oficina;
     @OneToOne

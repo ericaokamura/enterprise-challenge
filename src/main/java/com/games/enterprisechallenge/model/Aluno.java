@@ -33,7 +33,7 @@ public class Aluno implements UserDetails {
 
     private String email;
     private String senha;
-
+    private boolean aceitaTermo;
     @OneToOne
     private Role role;
 

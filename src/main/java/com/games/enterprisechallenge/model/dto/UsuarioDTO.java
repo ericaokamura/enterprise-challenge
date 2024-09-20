@@ -14,4 +14,5 @@ public class UsuarioDTO {
     private String email;
     private String senha;
     private Long roleId;
+    private boolean aceitaTermo;
 }

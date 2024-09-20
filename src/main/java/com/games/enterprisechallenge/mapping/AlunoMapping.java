@@ -16,6 +16,7 @@ public class AlunoMapping {
         dto.setConheceProgramacao(model.isConheceProgramacao());
         dto.setOficinaId(model.getOficina().getId());
         dto.setRoleId(model.getRole().getId());
+        dto.setAceitaTermo(model.isAceitaTermo());
         return dto;
     }
 
@@ -26,6 +27,7 @@ public class AlunoMapping {
         model.setNomeCompleto(dto.getNomeCompleto());
         model.setNumeroCelular(dto.getNumeroCelular());
         model.setConheceProgramacao(dto.isConheceProgramacao());
+        model.setAceitaTermo(dto.isAceitaTermo());
         return model;
     }
 }

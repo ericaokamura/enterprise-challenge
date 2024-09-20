@@ -14,6 +14,7 @@ public class ContatoMapping {
         dto.setNomeCompleto(model.getNomeCompleto());
         dto.setNumeroCelular(model.getNumeroCelular());
         dto.setCriticaSugestao(model.getCriticaSugestao());
+        dto.setAceitaTermo(model.isAceitaTermo());
         return dto;
     }
 
@@ -23,6 +24,7 @@ public class ContatoMapping {
         model.setNomeCompleto(dto.getNomeCompleto());
         model.setNumeroCelular(dto.getNumeroCelular());
         model.setCriticaSugestao(dto.getCriticaSugestao());
+        model.setAceitaTermo(dto.isAceitaTermo());
         return model;
     }
 }

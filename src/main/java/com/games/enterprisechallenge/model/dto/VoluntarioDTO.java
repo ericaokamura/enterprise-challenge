@@ -18,5 +18,7 @@ public class VoluntarioDTO {
     private String senha;
     private Long oficinaId;
     private Long roleId;
+    private boolean aceitaTermo;
+
 
 }

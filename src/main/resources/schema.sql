@@ -15,7 +15,8 @@ create table usuario(
     id INT primary key auto_increment,
     email VARCHAR(200),
     senha VARCHAR(200),
-    role_id INT references role(id)
+    aceita_termo BOOL,
+    role_id INT references role(id),
 );
 create table aluno(
     id INT primary key auto_increment,
@@ -26,6 +27,7 @@ create table aluno(
     role_id INT references role(id),
     idade INT,
     conhece_programacao BOOL,
+    aceita_termo BOOL,
     oficina_id INT references oficina(id)
 );
 create table voluntario(
@@ -36,6 +38,7 @@ create table voluntario(
     senha VARCHAR(200),
     role_id INT references role(id),
     motivacao VARCHAR(500),
+    aceita_termo BOOL,
     oficina_id INT references oficina(id)
 );
 create table contato(
@@ -46,6 +49,7 @@ create table contato(
     senha VARCHAR(200),
     role_id INT references role(id),
     critica_sugestao VARCHAR(500)
+    aceita_termo BOOL
 );
 
 insert into role (id, nome, authorities) values (

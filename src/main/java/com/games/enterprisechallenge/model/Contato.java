@@ -29,6 +29,7 @@ public class Contato implements UserDetails {
     private String criticaSugestao;
     private String email;
     private String senha;
+    private boolean aceitaTermo;
 
     @OneToOne
     private Role role;

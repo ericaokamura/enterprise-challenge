@@ -43,30 +43,31 @@ public class CadastroService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public AlunoDTO cadastrarAluno(AlunoDTO dto) {
-        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(dto.getEmail());
+    public AlunoDTO cadastrarAluno(AlunoDTO alunoDTO) {
+        Optional<Aluno> alunoOptional = alunoRepository.findByEmail(alunoDTO.getEmail());
         if(alunoOptional.isPresent()) {
             throw new AlunoJaExistenteException("Aluno já existente.");
         }
-        Optional<Role> roleOptional = roleRepository.findById(dto.getRoleId());
+        Optional<Role> roleOptional = roleRepository.findById(alunoDTO.getRoleId());
         if(roleOptional.isEmpty()) {
             throw new RoleNaoExistenteException("Role informada não existente.");
         }
-        Optional<Oficina> oficinaOptional = oficinaRepository.findById(dto.getOficinaId());
+        Optional<Oficina> oficinaOptional = oficinaRepository.findById(alunoDTO.getOficinaId());
         if(oficinaOptional.isEmpty()) {
             throw new OficinaNaoExistenteException("Oficina informada não existente.");
         }
 
-        Aluno salvarAluno = AlunoMapping.convertDtoToModel(dto);
-        salvarAluno.setSenha(passwordEncoder.encode(dto.getSenha()));
+        Aluno salvarAluno = AlunoMapping.convertDtoToModel(alunoDTO);
+        salvarAluno.setSenha(passwordEncoder.encode(alunoDTO.getSenha()));
         salvarAluno.setRole(roleOptional.get());
         salvarAluno.setOficina(oficinaOptional.get());
         Aluno aluno = alunoRepository.save(salvarAluno);
 
         Usuario usuario = new Usuario();
-        usuario.setEmail(dto.getEmail());
+        usuario.setEmail(alunoDTO.getEmail());
         usuario.setRole(roleOptional.get());
-        usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setSenha(passwordEncoder.encode(alunoDTO.getSenha()));
+        usuario.setAceitaTermo(alunoDTO.isAceitaTermo());
         usuarioRepository.save(usuario);
 
         return AlunoMapping.convertModelToDto(aluno);
@@ -90,6 +91,7 @@ public class CadastroService {
         usuario.setEmail(dto.getEmail());
         usuario.setRole(roleOptional.get());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setAceitaTermo(dto.isAceitaTermo());
         usuarioRepository.save(usuario);
 
         return ContatoMapping.convertModelToDto(contato);
@@ -100,14 +102,17 @@ public class CadastroService {
         if(voluntarioOptional.isPresent()) {
             throw new VoluntarioJaExistenteException("Voluntário já existente.");
         }
+
         Optional<Role> roleOptional = roleRepository.findById(dto.getRoleId());
         if(roleOptional.isEmpty()) {
             throw new RoleNaoExistenteException("Role informada não existente.");
         }
+
         Optional<Oficina> oficinaOptional = oficinaRepository.findById(dto.getOficinaId());
         if(oficinaOptional.isEmpty()) {
             throw new OficinaNaoExistenteException("Oficina informada não existente.");
         }
+
         Voluntario salvarVoluntario = VoluntarioMapping.convertDtoToModel(dto);
         salvarVoluntario.setSenha(passwordEncoder.encode(dto.getSenha()));
         salvarVoluntario.setRole(roleOptional.get());
@@ -118,6 +123,7 @@ public class CadastroService {
         usuario.setEmail(dto.getEmail());
         usuario.setRole(roleOptional.get());
         usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+        usuario.setAceitaTermo(dto.isAceitaTermo());
         usuarioRepository.save(usuario);
 
         return VoluntarioMapping.convertModelToDto(voluntario);
